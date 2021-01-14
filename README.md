@@ -14,4 +14,4 @@ In the project directory, you can run:
 
 ## Usage
 
-Simiply add th e crypto currency you have purchased and see your live earning and current total earning. keep track of all the graphs and prices.
+Simiply add the crypto currency you have purchased, see your live earning and current total earnings. This helps you keep track of all the prices updating every 20 seconds.

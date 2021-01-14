@@ -1,6 +1,5 @@
-import React from "react";
 
-const get = async (token) => {
+const get = async () => {
   const response = await fetch('https://api.coinstats.app/public/v1/coins?skip=0&limit=0&currency=USD', {
     method: 'GET',
     mode: 'cors',
@@ -13,7 +12,6 @@ const get = async (token) => {
   }
 
   const json = await response.json();
-  console.log(json)
   const { coins } = json;
   // if (status !== 'ok') {
   //   throw new Error(message);

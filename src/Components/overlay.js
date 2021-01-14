@@ -68,26 +68,22 @@ const useStyles = makeStyles({
 
 export const Overlay = () => {
   const classes = useStyles();
-  const crpyptoId = ['bitcoin','ethereum', 'chainlink'];
   const [data, setData] = useState([]);
   const [coins, setCoins] = useState([]);
   const [totalInvested, setTotalInvested] = useState(0);
   const [totalEarn, setTotalEarned] = useState(0);
 
-  const [loading, setLoading] = useState(true);
+  const [ setLoading] = useState(true);
   const [currentlyInvested, setcurrentlyInvested] = useStateWithLocalStorage('currentlyInvested');
 
   // useEffect(() => {
   //   setcurrentlyInvested(crpyptoId);
   // }, []);
 
-  console.log(currentlyInvested);
   useEffect(() => {
-    console.log('doing')
     async function getData() {
       try {
         const response = await price.get();
-        console.log(response)
         const objMap=[];
         const getList = [];
         if(currentlyInvested) {
@@ -100,7 +96,6 @@ export const Overlay = () => {
           getList.push(e1.id);
         });
         setData(objMap);
-        console.log(getList)
         setCoins(getList);
       } catch (error) {
         console.log(error.message)
@@ -115,7 +110,7 @@ export const Overlay = () => {
     return () => clearInterval(interval);
     // if(currentlyInvested).length) {
     // }
-  }, [currentlyInvested]);
+  }, [currentlyInvested, setLoading]);
 
   useEffect(() => {
     if(data.length) {
@@ -134,31 +129,19 @@ export const Overlay = () => {
     <TemporaryDrawer currentlyInvested={currentlyInvested} setcurrentlyInvested={setcurrentlyInvested} />
     <Navbar coins={coins} currentlyInvested={currentlyInvested} setcurrentlyInvested={setcurrentlyInvested} totalInvested={totalInvested} totalEarn={totalEarn} />
     <div className={classes.rootContainer}>
-      {data.length && data.map((item) => (
-        <div className={classes.chartContainer}>
-          <coin-stats-chart-widget type="large" coin-id={item.id} width="435" chart-height="180" currency="USD" locale="en" bg-color="#1C1B1B" status-up-color="#74D492" status-down-color="#FE4747" text-color="#FFFFFF" buttons-color="#1C1B1B" chart-color="#FFA959" chart-gradient-from="rgba(255,255,255,0.07)" chart-gradient-to="rgba(0,0,0,0)" border-color="rgba(255,255,255,0.15)" btc-color="#6DD400" eth-color="#67B5FF" chart-label-background="#000000" candle-grids-color="rgba(255,255,255,0.1)"></coin-stats-chart-widget>
-          <div className={classes.itemHeading}>
-            <p className={classes.text}>{item.price.toFixed(5)} USD</p>
-            <p className={classes.text}>Asset: {item.buyingAmount}</p>
-            <p className={classes.text}>{((item.price * item.buyingAmount) - (item.buyingAmount * item.buyingPrice)).toFixed(5)}</p>
+      {data.length && data.map((item) => {
+        const currentStat = ((item.price * item.buyingAmount) - (item.buyingAmount * item.buyingPrice)).toFixed(5);
+        return (
+          <div className={classes.chartContainer}>
+            <coin-stats-chart-widget type="large" coin-id={item.id} width="435" chart-height="180" currency="USD" locale="en" bg-color="#1C1B1B" status-up-color="#74D492" status-down-color="#FE4747" text-color="#FFFFFF" buttons-color="#1C1B1B" chart-color="#FFA959" chart-gradient-from="rgba(255,255,255,0.07)" chart-gradient-to="rgba(0,0,0,0)" border-color="rgba(255,255,255,0.15)" btc-color="#6DD400" eth-color="#67B5FF" chart-label-background="#000000" candle-grids-color="rgba(255,255,255,0.1)"></coin-stats-chart-widget>
+            <div className={classes.itemHeading}>
+              <p className={classes.text}>{item.price.toFixed(5)} USD</p>
+              <p className={classes.text}>Asset: {item.buyingAmount}</p>
+              {/* <p className={classes.text} style={{color: `${price > 0 ? 'red' : 'green'}`}} >{`${price > 0 ? '-' : '+'}${totalEarn.toFixed(5)}`}$</p> */}
+              <p className={classes.text} style={{color: `${currentStat > 0 ? 'green' : 'red'}`}} >{currentStat}</p>
+            </div>
           </div>
-        </div>
-        // <div className={classes.iframContainer}>
-        //   <div className={classes.iframeInnerContainer}>
-        //     <iframe
-        //       src={`https://widget.coinlib.io/widget?type=chart&theme=dark&coin_id=${item}&pref_coin_id=1505`}
-        //       width="100%"
-        //       height="536px"
-        //       scrolling="auto"
-        //       marginWidth={0}
-        //       marginHeight={0}
-        //       frameBorder={0}
-        //       border={0}
-        //       style={{ border: 0, margin: 0, padding: 0, lineHeight: "14px" }}
-        //     />
-        //   </div>
-        // </div>
-      ))}
+      )})}
     </div>
     </>
   );
