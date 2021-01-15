@@ -1,6 +1,6 @@
 # Basic Crypto Portfolio Visualizer
 
-demo: https://60006f217219e8000750228d--boring-yalow-29063a.netlify.app/
+demo: https://crypto-viewer.netlify.app/
 
 ## Installation
 
